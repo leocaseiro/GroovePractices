@@ -1,10 +1,12 @@
 import { deleteGroove, editGroove, showGrooveForm } from './grooveForm.js';
 import { showPracticeForm } from './practiceForm.js';
 import { get, getAll, remove, update } from './db.js';
+import { currentPage, currentItemsPerPage, setCurrentPage } from './shared.js';
+import { handleFilterPagination } from './search.js';
 
 let currentSort = { column: 'name', direction: 'asc' };
 
-function renderGrooves(grooves) {
+function renderGrooves(grooves, totalItems, currentPage, totalPages) {
     const tbody = document.querySelector('#grooveList tbody');
     tbody.innerHTML = '';
 
@@ -42,6 +44,83 @@ function renderGrooves(grooves) {
 
     // Update sort indicators
     updateSortIndicators();
+
+    // Render pagination controls
+    renderPagination(totalItems, currentPage, totalPages);
+}
+
+function renderPagination(totalItems, currentPage, totalPages) {
+    const paginationContainer = document.getElementById('pagination');
+    paginationContainer.innerHTML = '';
+
+    // Previous button
+    const prevButton = createButton('prev', currentPage <= 1, () => {
+        if (currentPage > 1) {
+            handleFilterPagination(currentPage - 1);
+        }
+    });
+
+    paginationContainer.appendChild(prevButton);
+    let startPage, endPage;
+    if (totalPages <= 6) {
+        // If 6 or fewer pages, show all
+        startPage = 1;
+        endPage = totalPages;
+    } else if (currentPage <= 3) {
+        // Near the beginning
+        startPage = 1;
+        endPage = 5;
+    } else if (currentPage >= totalPages - 2) {
+        // Near the end
+        startPage = totalPages - 4;
+        endPage = totalPages;
+    } else {
+        // In the middle
+        startPage = currentPage - 2;
+        endPage = currentPage + 2;
+    }
+
+    // First page button (if not in range)
+    if (startPage > 1) {
+        paginationContainer.appendChild(createButton('1', false, () => handleFilterPagination(1)));
+
+        if (startPage > 2) {
+            paginationContainer.appendChild(createButton('...', true));
+        }
+    }
+    // Page buttons
+    for (let i = startPage; i <= endPage; i++) {
+        paginationContainer.appendChild(createButton(i.toString(), false, () => handleFilterPagination(i), i === currentPage));
+    }
+
+    // Last page button (if not in range)
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            paginationContainer.appendChild(createButton('...', true));
+        }
+        paginationContainer.appendChild(createButton(totalPages.toString(), false, () => handleFilterPagination(totalPages)));
+    }
+
+    // Next button
+    const nextButton = createButton('next', currentPage >= totalPages, () => {
+        if (currentPage < totalPages) {
+            handleFilterPagination(currentPage + 1);
+        }
+    });
+    paginationContainer.appendChild(nextButton);
+}
+
+function createButton(text, disabled, onClick, isCurrent = false) {
+    const button = document.createElement('button');
+    button.textContent = text;
+    button.disabled = disabled;
+    if (onClick) {
+        button.addEventListener('click', onClick);
+    }
+    if (isCurrent) {
+        button.classList.add('current-page');
+    }
+    return button;
 }
 
 function updateSortIndicators() {
@@ -86,9 +165,10 @@ function handleSort(column) {
     loadGrooves();
 }
 
-function loadGrooves() {
-    getAll().then(grooves => {
-        renderGrooves(grooves);
+function loadGrooves(page = currentPage) {
+    setCurrentPage(page);
+    getAll(currentPage, currentItemsPerPage).then(result => {
+        renderGrooves(result.grooves, result.totalItems, result.currentPage, result.totalPages);
     }).catch(error => {
         console.error('Error loading grooves:', error);
     });
@@ -119,4 +199,4 @@ document.querySelector('#grooveList thead').addEventListener('click', (e) => {
     }
 });
 
-export { renderGrooves, loadGrooves };
+export { renderGrooves, renderPagination, loadGrooves };

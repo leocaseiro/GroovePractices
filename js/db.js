@@ -1,3 +1,5 @@
+import { currentPage, currentItemsPerPage, setCurrentPage } from './shared.js';
+
 let db;
 const dbName = 'GroovePracticesDB';
 const dbVersion = 1;
@@ -25,14 +27,37 @@ function initDB() {
     });
 }
 
-function getAll() {
+function isDBInitialized() {
+    return !!db;
+}
+
+function getAll(page = currentPage, itemsPerPage = currentItemsPerPage) {
     return new Promise((resolve, reject) => {
+
+        if (!isDBInitialized()) {
+            reject(new Error("Database is not initialized"));
+            return;
+        }
+
         const transaction = db.transaction(['grooves'], 'readonly');
         const objectStore = transaction.objectStore('grooves');
         const request = objectStore.getAll();
 
         request.onsuccess = (event) => {
-            resolve(event.target.result);
+            const allGrooves = event.target.result;
+            const totalItems = allGrooves.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const startIndex = (page - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedGrooves = allGrooves.slice(startIndex, endIndex);
+
+            resolve({
+                allGrooves: allGrooves,
+                grooves: paginatedGrooves,
+                totalItems: totalItems,
+                currentPage: page,
+                totalPages: totalPages
+            });
         };
 
         request.onerror = (event) => {
@@ -105,4 +130,4 @@ function remove(id) {
     });
 }
 
-export { initDB, getAll, add, update, get, remove };
+export { initDB, isDBInitialized, getAll, add, update, get, remove };

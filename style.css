@@ -32,3 +32,26 @@
 #groove-practices .form-actions button[type="submit"] {
     width: auto;
 }
+
+#groove-practices #pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+#groove-practices #pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+}
+#groove-practices #pagination button:disabled {
+    /* opacity: 0.5; */
+    cursor: not-allowed;
+}
+
+#pagination button.current-page {
+    background-color: var(--pico-secondary-background);
+    color: white;
+    font-weight: bold;
+}
+#pagination button.current-page:hover {
+    background-color: var(--pico-secondary-hover-background);
+    border-color: var(--pico-secondary-hover-border);
+}

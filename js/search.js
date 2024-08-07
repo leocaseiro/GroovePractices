@@ -1,27 +1,56 @@
-import { getAll } from './db.js';
-import { renderGrooves } from './ui.js';
+import { getAll, initDB, isDBInitialized } from './db.js';
+import { renderGrooves, renderPagination } from './ui.js';
+import { currentPage, currentItemsPerPage, setCurrentPage } from './shared.js';
 
-function applyFilters() {
+let filteredGrooves = []; // Store filtered grooves globally
+
+function applyFilters(page = 1) {
+    debugger;
+    if (!isDBInitialized()) {
+        console.error('Database is not initialized. Please wait and try again.');
+        return;
+    }
+
+    setCurrentPage(page);
     const searchTerm = document.getElementById('search').value.toLowerCase();
     const authorFilter = document.getElementById('authorFilter').value;
     const difficultyFilter = document.getElementById('difficultyFilter').value;
     const bookmarkedFilter = document.getElementById('bookmarkedFilter').checked;
 
-    getAll().then(grooves => {
-        grooves = grooves.filter(groove =>
+    getAll(page).then(({ allGrooves }) => {
+        // Apply filters to all grooves
+        filteredGrooves = allGrooves.filter(groove =>
             (groove.name.toLowerCase().includes(searchTerm) || groove.author.toLowerCase().includes(searchTerm)) &&
             (authorFilter === '' || groove.author === authorFilter) &&
             (difficultyFilter === '' || groove.difficulty.toString() === difficultyFilter) &&
             (!bookmarkedFilter || groove.bookmark)
         );
-        renderGrooves(grooves);
+        // Calculate pagination
+        const totalItems = filteredGrooves.length;
+        const totalPages = Math.ceil(totalItems / currentItemsPerPage);
+        const startIndex = (page - 1) * currentItemsPerPage;
+        const endIndex = startIndex + currentItemsPerPage;
+        const paginatedGrooves = filteredGrooves.slice(startIndex, endIndex);
+
+        handleFilterPagination(page);
     }).catch(error => {
         console.error('Error applying filters:', error);
     });
 }
 
+// Function to handle pagination for filtered results
+function handleFilterPagination(page) {
+    // Calculate pagination
+    const totalItems = filteredGrooves.length;
+    const startIndex = (page - 1) * currentItemsPerPage;
+    const endIndex = startIndex + currentItemsPerPage;
+    const paginatedGrooves = filteredGrooves.slice(startIndex, endIndex);
+    const totalPages = Math.ceil(filteredGrooves.length / currentItemsPerPage);
+    renderGrooves(paginatedGrooves, totalItems, page, totalPages);
+}
+
 function populateAuthorFilter() {
-    getAll().then(grooves => {
+    getAll(currentPage, currentItemsPerPage).then(({ grooves }) => {
         const authors = [...new Set(grooves.map(groove => groove.author))];
         authors.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         const select = document.getElementById('authorFilter');
@@ -37,10 +66,16 @@ function populateAuthorFilter() {
     });
 }
 
-// Event listeners
-document.getElementById('search').addEventListener('input', applyFilters);
-document.getElementById('authorFilter').addEventListener('change', applyFilters);
-document.getElementById('difficultyFilter').addEventListener('change', applyFilters);
-document.getElementById('bookmarkedFilter').addEventListener('change', applyFilters);
+function goToFirstPage() {
+    applyFilters(1);
+}
 
-export { applyFilters, populateAuthorFilter };
+// Event listeners
+initDB().then(() => {
+    document.getElementById('search').addEventListener('input', goToFirstPage);
+    document.getElementById('authorFilter').addEventListener('change', goToFirstPage);
+    document.getElementById('difficultyFilter').addEventListener('change', goToFirstPage);
+    document.getElementById('bookmarkedFilter').addEventListener('change', goToFirstPage);
+});
+
+export { applyFilters, handleFilterPagination, populateAuthorFilter };
