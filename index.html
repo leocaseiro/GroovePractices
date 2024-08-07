@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark" />
+    <title>Groove Practices</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css">
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body id="groove-practices">
+    <main class="container">
+        <h1>Groove Practices</h1>
+
+        <!-- Search and Filter Controls -->
+        <section id="controls">
+            <div class="grid">
+                <input type="search" id="search" placeholder="Search">
+                <select id="authorFilter">
+                    <option value="">- All Authors -</option>
+                </select>
+                <select id="difficultyFilter">
+                    <option value="">- All Difficulties -</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+                <label>
+                    <input role="switch" type="checkbox" id="bookmarkedFilter"> Bookmarked
+                </label>
+                <button id="addGroove">Add New Groove</button>
+            </div>
+        </section>
+
+        <!-- Groove List Table -->
+        <section class="overflow-auto">
+            <table id="grooveList">
+                <thead>
+                    <tr>
+                        <th>⭐️</th>
+                        <th class="sortable" data-sort="name">Name ▼</th>
+                        <th class="sortable" data-sort="author">Author ▼</th>
+                        <th class="sortable" data-sort="difficulty">Difficulty ▼</th>
+                        <th class="sortable" data-sort="bpm">BPM</th>
+                        <th>Last Practice</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <!-- Add/Edit Groove Form -->
+        <section id="formContainer" class="hidden">
+            <h2 id="formTitle">Add New Groove</h2>
+            <form id="grooveForm">
+                <input type="hidden" id="grooveId">
+                <div class="grid">
+                    <label for="name">Name: <input type="text" id="name" required></label>
+                    <label for="author">Author: <input type="text" id="author" required></label>
+                    <label for="difficulty">Difficulty:
+                        <select id="difficulty" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </label>
+                    <label for="bpm">BPM: <input type="number" id="bpm" value="80" required></label>
+                </div>
+                <label for="value">Value: <textarea id="value" required></textarea></label>
+                <div class="form-actions">
+                    <button class="secondary" type="button" id="cancelForm">Cancel</button>
+                    <button type="submit">Save Groove</button>
+                </div>
+            </form>
+            <div id="practicesList" class="hidden">
+                <h3>Practices</h3>
+                <table id="practicesTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>BPM</th>
+                            <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Add Practice Form -->
+        <section id="practiceFormContainer" class="hidden">
+            <h2>Add Practice</h2>
+            <form id="practiceForm">
+                <input type="hidden" id="practiceGrooveId" name="grooveId">
+                <div class="grid">
+                    <label for="practiceBpm">BPM: <input type="number" id="practiceBpm" name="bpm" required></label>
+                    <label for="practiceScore">Score: <input type="number" id="practiceScore" name="score" required min="0" max="100"></label>
+                </div>
+                <div class="form-actions">
+                    <button class="secondary" type="button" id="cancelPractice">Cancel</button>
+                    <button type="submit">Save Practice</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Scripts -->
+    <script type="module" src="./js/db.js"></script>
+    <script type="module" src="./js/ui.js"></script>
+    <script type="module" src="./js/search.js"></script>
+    <script type="module" src="./js/grooveForm.js"></script>
+    <script type="module" src="./js/practiceForm.js"></script>
+    <script type="module" src="./js/app.js"></script>
+</body>
+</html>
