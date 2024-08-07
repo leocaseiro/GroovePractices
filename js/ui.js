@@ -1,29 +1,12 @@
 import { deleteGroove, editGroove, showGrooveForm } from './grooveForm.js';
 import { showPracticeForm } from './practiceForm.js';
 import { get, getAll, remove, update } from './db.js';
-import { currentPage, currentItemsPerPage, setCurrentPage } from './shared.js';
-import { handleFilterPagination } from './search.js';
-
-let currentSort = { column: 'name', direction: 'asc' };
+import { currentItemsPerPage, currentPage, currentSort, setCurrentPage, setCurrentSort } from './shared.js';
+import { applyFilters, handleFilterPagination } from './search.js';
 
 function renderGrooves(grooves, totalItems, currentPage, totalPages) {
     const tbody = document.querySelector('#grooveList tbody');
     tbody.innerHTML = '';
-
-    // Sort the grooves based on the current sort settings
-    grooves.sort((a, b) => {
-        const aValue = a[currentSort.column];
-        const bValue = b[currentSort.column];
-        if (typeof aValue === 'string' && typeof bValue === 'string') {
-            return currentSort.direction === 'asc'
-                ? aValue.toLowerCase().localeCompare(bValue.toLowerCase())
-                : bValue.toLowerCase().localeCompare(aValue.toLowerCase());
-        } else {
-            return currentSort.direction === 'asc'
-                ? aValue - bValue
-                : bValue - aValue;
-        }
-    });
 
     grooves.forEach(groove => {
         const row = tbody.insertRow();
@@ -156,22 +139,25 @@ function toggleBookmark(id) {
 }
 
 function handleSort(column) {
+    let newCurrentSort = {
+        ...currentSort
+    };
     if (currentSort.column === column) {
-        currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        newCurrentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc',
+        setCurrentSort(newCurrentSort);
     } else {
-        currentSort.column = column;
-        currentSort.direction = 'asc';
+        newCurrentSort = {
+            column: column,
+            direction: 'asc'
+        }
     }
-    loadGrooves();
+    setCurrentSort(newCurrentSort);
+    applyFilters(1);
 }
 
 function loadGrooves(page = currentPage) {
     setCurrentPage(page);
-    getAll(currentPage, currentItemsPerPage).then(result => {
-        renderGrooves(result.grooves, result.totalItems, result.currentPage, result.totalPages);
-    }).catch(error => {
-        console.error('Error loading grooves:', error);
-    });
+    applyFilters(page);
 }
 
 // Event listeners

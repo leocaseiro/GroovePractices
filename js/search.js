@@ -1,11 +1,8 @@
 import { getAll, initDB, isDBInitialized } from './db.js';
 import { renderGrooves, renderPagination } from './ui.js';
-import { currentPage, currentItemsPerPage, setCurrentPage } from './shared.js';
-
-let filteredGrooves = []; // Store filtered grooves globally
+import { currentSort, currentPage, currentItemsPerPage, filteredGrooves, setFilteredGrooves, setCurrentPage } from './shared.js';
 
 function applyFilters(page = 1) {
-    debugger;
     if (!isDBInitialized()) {
         console.error('Database is not initialized. Please wait and try again.');
         return;
@@ -19,18 +16,36 @@ function applyFilters(page = 1) {
 
     getAll(page).then(({ allGrooves }) => {
         // Apply filters to all grooves
-        filteredGrooves = allGrooves.filter(groove =>
+        const newFilteredGrooves = allGrooves.filter(groove =>
             (groove.name.toLowerCase().includes(searchTerm) || groove.author.toLowerCase().includes(searchTerm)) &&
             (authorFilter === '' || groove.author === authorFilter) &&
             (difficultyFilter === '' || groove.difficulty.toString() === difficultyFilter) &&
             (!bookmarkedFilter || groove.bookmark)
         );
+
+        // Sort the grooves based on the current sort settings
+        newFilteredGrooves.sort((a, b) => {
+            const aValue = a[currentSort.column];
+            const bValue = b[currentSort.column];
+            if (typeof aValue === 'string' && typeof bValue === 'string') {
+                return currentSort.direction === 'asc'
+                    ? aValue.toLowerCase().localeCompare(bValue.toLowerCase())
+                    : bValue.toLowerCase().localeCompare(aValue.toLowerCase());
+            } else {
+                return currentSort.direction === 'asc'
+                    ? aValue - bValue
+                    : bValue - aValue;
+            }
+        });
+
+        setFilteredGrooves(newFilteredGrooves);
+
         // Calculate pagination
-        const totalItems = filteredGrooves.length;
+        const totalItems = newFilteredGrooves.length;
         const totalPages = Math.ceil(totalItems / currentItemsPerPage);
         const startIndex = (page - 1) * currentItemsPerPage;
         const endIndex = startIndex + currentItemsPerPage;
-        const paginatedGrooves = filteredGrooves.slice(startIndex, endIndex);
+        const paginatedGrooves = newFilteredGrooves.slice(startIndex, endIndex);
 
         handleFilterPagination(page);
     }).catch(error => {

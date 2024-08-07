@@ -1,57 +1,85 @@
 #groove-practices #grooveList th.sortable {
-    cursor: pointer;
+  cursor: pointer;
 }
 #groove-practices #grooveList .bookmark-star {
-    cursor: pointer;
-    font-size: 1.2em;
+  cursor: pointer;
+  font-size: 1.2em;
 }
 #groove-practices #grooveList .bookmark-star {
-    background: none;
-    border: none;
+  background: none;
+  border: none;
 }
 #groove-practices #grooveList .bookmark-star:hover {
-    background-color: var(--pico-primary-hover-background);
-    border-color: var(--pico-primary-hover-border);
-    box-shadow: var(--pico-button-hover-box-shadow, 0 0 0 rgba(0, 0, 0, 0));
-    color: var(--pico-primary-inverse);
+  background-color: var(--pico-primary-hover-background);
+  border-color: var(--pico-primary-hover-border);
+  box-shadow: var(--pico-button-hover-box-shadow, 0 0 0 rgba(0, 0, 0, 0));
+  color: var(--pico-primary-inverse);
 }
 #groove-practices #grooveList .bookmark-star.not-bookmarked {
-    filter: grayscale(100%);
+  filter: grayscale(100%);
 }
 
 #groove-practices .hidden {
-    display: none;
+  display: none;
 }
 
 #groove-practices .form-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
 }
 
 #groove-practices .form-actions button[type="submit"] {
-    width: auto;
+  width: auto;
 }
 
 #groove-practices #pagination {
-    margin-top: 20px;
-    text-align: center;
+  margin-top: 20px;
+  text-align: center;
 }
 #groove-practices #pagination button {
-    margin: 0 5px;
-    padding: 5px 10px;
+  margin: 0 5px;
+  padding: 5px 10px;
 }
 #groove-practices #pagination button:disabled {
-    /* opacity: 0.5; */
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
-#pagination button.current-page {
-    background-color: var(--pico-secondary-background);
-    color: white;
-    font-weight: bold;
+#groove-practices #pagination button.current-page {
+  background-color: var(--pico-secondary-background);
+  color: white;
+  font-weight: bold;
 }
-#pagination button.current-page:hover {
-    background-color: var(--pico-secondary-hover-background);
-    border-color: var(--pico-secondary-hover-border);
+
+#groove-practices #pagination button.current-page:hover {
+  background-color: var(--pico-secondary-hover-background);
+  border-color: var(--pico-secondary-hover-border);
+}
+
+#groove-practices .github-corner:hover .octo-arm {
+  animation: octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20%,
+  60% {
+    transform: rotate(-25deg);
+  }
+  40%,
+  80% {
+    transform: rotate(10deg);
+  }
+}
+
+@media (max-width: 500px) {
+    #groove-practices .github-corner:hover .octo-arm {
+    animation: none;
+  }
+  #groove-practices .github-corner .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
 }
