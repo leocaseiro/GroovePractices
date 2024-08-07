@@ -1,6 +1,7 @@
 import { get, add, update, remove } from './db.js';
 import { loadGrooves } from './ui.js';
 import { populateAuthorFilter } from './search.js';
+import { scrollToDiv } from './shared.js';
 
 function showGrooveForm(groove = null) {
     const form = document.getElementById('grooveForm');
@@ -30,6 +31,7 @@ function showGrooveForm(groove = null) {
     }
 
     document.getElementById('formContainer').style.display = 'block';
+    scrollToDiv('formContainer');
 }
 
 function hideGrooveForm() {
