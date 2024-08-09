@@ -7,6 +7,8 @@
     <title>Groove Practices</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css">
     <link rel="stylesheet" href="./style.css">
+    <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 </head>
 <body id="groove-practices">
     <a target="_blank" href="https://github.com/leocaseiro/GroovePractices/" class="github-corner" aria-label="View source on GitHub">
@@ -18,8 +20,8 @@
         <!-- Search and Filter Controls -->
         <section id="controls">
             <div class="grid">
-                <input type="search" id="search" placeholder="Search">
-                <input type="text" id="tagSearch" placeholder="Search tags (comma-separated)">
+                <input type="search" id="search" name="search" placeholder="Search">
+                <input type="text" id="tagSearch" name="tagSearch" placeholder="Search tags (comma-separated)">
                 <select id="authorFilter">
                     <option value="">- All Authors -</option>
                 </select>
@@ -87,10 +89,9 @@
                     </label>
                     <label for="bpm">BPM: <input type="number" id="bpm" value="80" required></label>
                 </div>
-                <div class="form-group">
-                    <label for="tags">Tags (comma-separated):</label>
-                    <input type="text" id="tags" name="tags" class="form-control" placeholder="e.g., jazz, swing, beginner">
-                </div>
+                <label for="formTags">Tags (comma-separated):
+                    <input type="text" id="formTags" name="formTags" placeholder="e.g., jazz, swing, beginner">
+                </label>
                 <label for="value">Value: <textarea id="value" required></textarea></label>
                 <div class="form-actions">
                     <button class="secondary" type="button" id="cancelForm">Cancel</button>
@@ -127,27 +128,11 @@
                 </div>
             </form>
         </section>
-        </section>
-
-        <!-- Settings Form -->
-        <!-- <section id="settingsFormContainer" class="hidden"> -->
-        <section id="settingsFormContainer">
-            <h2>Settings</h2>
-            <form id="settingsForm">
-
-                <button id="exportBtn">Export to Gist</button>
-                <button id="importBtn">Import from Gist</button>
-                <input type="text" id="tokenInput" placeholder="Enter GitHub token">
-                <button id="saveTokenBtn">Save Token</button>
-                <div class="form-actions">
-                    <button class="secondary" type="button" id="cancelPractice">Cancel</button>
-                    <button type="submit">Save Practice</button>
-                </div>
-            </form>
-        </section>
     </main>
 
-    <!-- Scripts -->
+
+
+    <!-- Our Scripts -->
     <script type="module" src="./js/db.js"></script>
     <script type="module" src="./js/ui.js"></script>
     <script type="module" src="./js/search.js"></script>

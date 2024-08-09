@@ -1,8 +1,10 @@
 import { getAll, initDB, isDBInitialized } from './db.js';
 import { renderGrooves, renderPagination } from './ui.js';
 import { currentSort, currentPage, currentItemsPerPage, filteredGrooves, setFilteredGrooves, setCurrentPage } from './shared.js';
+import { searchTagify, initializeTagify, updateTagWhitelist, getFormTags, getSearchTags, addTagListeners } from './tags.js';
 
 function applyFilters(page = 1) {
+    console.log('applyFilters');
     if (!isDBInitialized()) {
         console.error('Database is not initialized. Please wait and try again.');
         return;
@@ -10,7 +12,8 @@ function applyFilters(page = 1) {
 
     setCurrentPage(page);
     const searchTerm = document.getElementById('search').value.toLowerCase();
-    const tagSearchTerms = document.getElementById('tagSearch').value.toLowerCase().split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+    // const tagSearchTerms = getSearchTags();
+    const tagSearchTerms = searchTagify.value.map(tag => tag.value.toLowerCase());
     const authorFilter = document.getElementById('authorFilter').value;
     const difficultyFilter = document.getElementById('difficultyFilter').value;
     const bookmarkedFilter = document.getElementById('bookmarkedFilter').checked;
@@ -50,6 +53,9 @@ function applyFilters(page = 1) {
         const paginatedGrooves = newFilteredGrooves.slice(startIndex, endIndex);
 
         handleFilterPagination(page);
+
+        // Update tag whitelist after filtering
+        updateTagWhitelist(allGrooves);
     }).catch(error => {
         console.error('Error applying filters:', error);
     });
@@ -88,12 +94,19 @@ function goToFirstPage() {
 }
 
 // Event listeners
-initDB().then(() => {
-    document.getElementById('search').addEventListener('input', goToFirstPage);
-    document.getElementById('tagSearch').addEventListener('input', goToFirstPage);
-    document.getElementById('authorFilter').addEventListener('change', goToFirstPage);
-    document.getElementById('difficultyFilter').addEventListener('change', goToFirstPage);
-    document.getElementById('bookmarkedFilter').addEventListener('change', goToFirstPage);
-});
+function initializeSearch() {
+    document.getElementById('search').addEventListener('input', () => applyFilters(1));
+    document.getElementById('authorFilter').addEventListener('change', () => applyFilters(1));
+    document.getElementById('difficultyFilter').addEventListener('change', () => applyFilters(1));
+    document.getElementById('bookmarkedFilter').addEventListener('change', () => applyFilters(1));
 
-export { applyFilters, handleFilterPagination, populateAuthorFilter };
+    // Initialize Tagify and update tag whitelist
+    initializeTagify();
+    getAll().then(({ allGrooves }) => {
+        updateTagWhitelist(allGrooves);
+        applyFilters(1); // Initial application of filters
+    });
+    addTagListeners(() => applyFilters(1));
+};
+
+export { applyFilters, handleFilterPagination, populateAuthorFilter, initializeSearch };

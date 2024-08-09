@@ -2,6 +2,7 @@ import { get, add, update, remove } from './db.js';
 import { loadGrooves } from './ui.js';
 import { populateAuthorFilter } from './search.js';
 import { scrollToDiv } from './shared.js';
+import { getFormTags, updateTagWhitelist } from './tags.js';
 
 function showGrooveForm(groove = null) {
     const form = document.getElementById('grooveForm');
@@ -16,7 +17,7 @@ function showGrooveForm(groove = null) {
         form.difficulty.value = groove.difficulty;
         form.value.value = groove.value;
         form.bpm.value = groove.bpm;
-        form.tags.value = groove.tags ? groove.tags.join(', ') : '';
+        form.formTags.value = groove.tags ? groove.tags.join(', ') : '';
 
         if (groove.practices && groove.practices.length > 0) {
             renderPractices(groove.practices);
@@ -28,7 +29,7 @@ function showGrooveForm(groove = null) {
         formTitle.textContent = 'Add New Groove';
         form.reset();
         form.grooveId.value = '';
-        form.tags.value = '';
+        form.formTags.value = '';
         practicesList.style.display = 'none';
     }
 
@@ -55,7 +56,6 @@ function renderPractices(practices) {
 }
 
 function saveGroove() {
-    debugger;
     const form = document.getElementById('grooveForm');
     const groove = {
         name: form.name.value,
@@ -64,7 +64,7 @@ function saveGroove() {
         value: form.value.value,
         bpm: parseInt(form.bpm.value),
         practices: [],
-        tags: form.tags.value.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
+        tags: getFormTags()
     };
 
     if (form.grooveId.value) {
@@ -88,6 +88,8 @@ function saveGroove() {
             console.error('Error saving groove:', error);
         });
     }
+
+    updateTagWhitelist(allGrooves);
 }
 
 function editGroove(id) {

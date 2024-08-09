@@ -4,6 +4,7 @@ import { get, getAll, remove, update } from './db.js';
 import { currentItemsPerPage, currentPage, currentSort, setCurrentPage, setCurrentSort } from './shared.js';
 import { applyFilters, handleFilterPagination } from './search.js';
 
+
 function renderGrooves(grooves, totalItems, currentPage, totalPages) {
     const tbody = document.querySelector('#grooveList tbody');
     tbody.innerHTML = '';

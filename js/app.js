@@ -1,10 +1,11 @@
 import { initDB } from './db.js';
 import { loadGrooves } from './ui.js';
-import { populateAuthorFilter } from './search.js';
+import { initializeSearch, populateAuthorFilter } from './search.js';
 import { populateTestData } from './testData.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initDB().then(() => {
+        initializeSearch();
         loadGrooves();
         populateAuthorFilter();
         populateTestData(50); // This will add 50 test grooves if the database is empty
