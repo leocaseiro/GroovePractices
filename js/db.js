@@ -2,7 +2,8 @@ import { currentPage, currentItemsPerPage, setCurrentPage } from './shared.js';
 
 let db;
 const dbName = 'GroovePracticesDB';
-const dbVersion = 1;
+const STORE_NAME = 'grooves';
+const dbVersion = 2;
 
 function initDB() {
     return new Promise((resolve, reject) => {
@@ -19,10 +20,48 @@ function initDB() {
         };
 
         request.onupgradeneeded = (event) => {
-            db = event.target.result;
-            const objectStore = db.createObjectStore('grooves', { keyPath: 'id', autoIncrement: true });
-            objectStore.createIndex('name', 'name', { unique: false });
-            objectStore.createIndex('author', 'author', { unique: false });
+            const db = event.target.result;
+            const transaction = event.target.transaction;
+
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                // If the object store doesn't exist, create it
+                const store = db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                // Create indexes for fields we are mostly searching by
+                store.createIndex('name', 'name', { unique: false });
+                store.createIndex('author', 'author', { unique: false });
+                store.createIndex('tags', 'tags', { unique: false, multiEntry: true });
+                store.createIndex('bpm', 'bpm', { unique: false });
+                store.createIndex('difficulty', 'difficulty', { unique: false });
+            } else {
+                // update its schema
+                const store = transaction.objectStore(STORE_NAME);
+
+                if (!store.indexNames.contains('tags')) {
+                    store.createIndex('tags', 'tags', { unique: false, multiEntry: true });
+                }
+                if (!store.indexNames.contains('bpm')) {
+                    store.createIndex('bpm', 'bpm', { unique: false });
+                }
+                if (!store.indexNames.contains('difficulty')) {
+                    store.createIndex('difficulty', 'difficulty', { unique: false });
+                }
+            }
+
+            // If we're upgrading from version 1 to 2, add tags to existing records
+            if (event.oldVersion < 2) {
+                const store = transaction.objectStore(STORE_NAME);
+                store.openCursor().onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (cursor) {
+                        const updateData = cursor.value;
+                        if (!updateData.tags) {
+                            updateData.tags = [];
+                            cursor.update(updateData);
+                        }
+                        cursor.continue();
+                    }
+                };
+            }
         };
     });
 }

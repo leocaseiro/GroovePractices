@@ -16,6 +16,7 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
             <td>${groove.author}</td>
             <td>${groove.difficulty}</td>
             <td>${groove.bpm}</td>
+            <td>${groove.tags.join(',<br> ')}</td>
             <td>${renderLastPractice(groove.practices)}</td>
              <td>
                 <button class="edit" data-id="${groove.id}">✏️</button>
@@ -121,8 +122,8 @@ function updateSortIndicators() {
 function renderLastPractice(practices) {
     if (practices && practices.length > 0) {
         const lastPractice = practices[practices.length - 1];
-        const date = new Date(lastPractice.datetime).toLocaleDateString();
-        return `${date} - Score: ${lastPractice.score}`;
+        const date = new Date(lastPractice.datetime).toLocaleDateString('en-AU', { month: 'short', day: '2-digit' });
+        return `${date} - ${lastPractice.score}`;
     }
     return 'No practices';
 }

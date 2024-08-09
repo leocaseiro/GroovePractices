@@ -16,6 +16,7 @@ function showGrooveForm(groove = null) {
         form.difficulty.value = groove.difficulty;
         form.value.value = groove.value;
         form.bpm.value = groove.bpm;
+        form.tags.value = groove.tags ? groove.tags.join(', ') : '';
 
         if (groove.practices && groove.practices.length > 0) {
             renderPractices(groove.practices);
@@ -27,6 +28,7 @@ function showGrooveForm(groove = null) {
         formTitle.textContent = 'Add New Groove';
         form.reset();
         form.grooveId.value = '';
+        form.tags.value = '';
         practicesList.style.display = 'none';
     }
 
@@ -53,6 +55,7 @@ function renderPractices(practices) {
 }
 
 function saveGroove() {
+    debugger;
     const form = document.getElementById('grooveForm');
     const groove = {
         name: form.name.value,
@@ -60,7 +63,8 @@ function saveGroove() {
         difficulty: parseInt(form.difficulty.value),
         value: form.value.value,
         bpm: parseInt(form.bpm.value),
-        practices: []
+        practices: [],
+        tags: form.tags.value.split(',').map(tag => tag.trim()).filter(tag => tag !== '')
     };
 
     if (form.grooveId.value) {

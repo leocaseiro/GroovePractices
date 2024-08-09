@@ -19,6 +19,7 @@
         <section id="controls">
             <div class="grid">
                 <input type="search" id="search" placeholder="Search">
+                <input type="text" id="tagSearch" placeholder="Search tags (comma-separated)">
                 <select id="authorFilter">
                     <option value="">- All Authors -</option>
                 </select>
@@ -51,7 +52,8 @@
                         <th class="sortable" data-sort="name">Name ▼</th>
                         <th class="sortable" data-sort="author">Author ▼</th>
                         <th class="sortable" data-sort="difficulty">Difficulty ▼</th>
-                        <th class="sortable" data-sort="bpm">BPM</th>
+                        <th class="sortable" data-sort="bpm">BPM ▼</th>
+                        <th>Tags</th>
                         <th>Last Practice</th>
                         <th>Actions</th>
                     </tr>
@@ -85,6 +87,10 @@
                     </label>
                     <label for="bpm">BPM: <input type="number" id="bpm" value="80" required></label>
                 </div>
+                <div class="form-group">
+                    <label for="tags">Tags (comma-separated):</label>
+                    <input type="text" id="tags" name="tags" class="form-control" placeholder="e.g., jazz, swing, beginner">
+                </div>
                 <label for="value">Value: <textarea id="value" required></textarea></label>
                 <div class="form-actions">
                     <button class="secondary" type="button" id="cancelForm">Cancel</button>
@@ -115,6 +121,24 @@
                     <label for="practiceBpm">BPM: <input type="number" id="practiceBpm" name="bpm" required></label>
                     <label for="practiceScore">Score: <input type="number" id="practiceScore" name="score" required min="0" max="100"></label>
                 </div>
+                <div class="form-actions">
+                    <button class="secondary" type="button" id="cancelPractice">Cancel</button>
+                    <button type="submit">Save Practice</button>
+                </div>
+            </form>
+        </section>
+        </section>
+
+        <!-- Settings Form -->
+        <!-- <section id="settingsFormContainer" class="hidden"> -->
+        <section id="settingsFormContainer">
+            <h2>Settings</h2>
+            <form id="settingsForm">
+
+                <button id="exportBtn">Export to Gist</button>
+                <button id="importBtn">Import from Gist</button>
+                <input type="text" id="tokenInput" placeholder="Enter GitHub token">
+                <button id="saveTokenBtn">Save Token</button>
                 <div class="form-actions">
                     <button class="secondary" type="button" id="cancelPractice">Cancel</button>
                     <button type="submit">Save Practice</button>

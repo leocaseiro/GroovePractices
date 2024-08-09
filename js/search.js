@@ -10,6 +10,7 @@ function applyFilters(page = 1) {
 
     setCurrentPage(page);
     const searchTerm = document.getElementById('search').value.toLowerCase();
+    const tagSearchTerms = document.getElementById('tagSearch').value.toLowerCase().split(',').map(tag => tag.trim()).filter(tag => tag !== '');
     const authorFilter = document.getElementById('authorFilter').value;
     const difficultyFilter = document.getElementById('difficultyFilter').value;
     const bookmarkedFilter = document.getElementById('bookmarkedFilter').checked;
@@ -18,6 +19,7 @@ function applyFilters(page = 1) {
         // Apply filters to all grooves
         const newFilteredGrooves = allGrooves.filter(groove =>
             (groove.name.toLowerCase().includes(searchTerm) || groove.author.toLowerCase().includes(searchTerm)) &&
+            (tagSearchTerms.length === 0 || tagSearchTerms.every(tag => groove.tags && groove.tags.some(grooveTag => grooveTag.toLowerCase().includes(tag)))) &&
             (authorFilter === '' || groove.author === authorFilter) &&
             (difficultyFilter === '' || groove.difficulty.toString() === difficultyFilter) &&
             (!bookmarkedFilter || groove.bookmark)
@@ -88,6 +90,7 @@ function goToFirstPage() {
 // Event listeners
 initDB().then(() => {
     document.getElementById('search').addEventListener('input', goToFirstPage);
+    document.getElementById('tagSearch').addEventListener('input', goToFirstPage);
     document.getElementById('authorFilter').addEventListener('change', goToFirstPage);
     document.getElementById('difficultyFilter').addEventListener('change', goToFirstPage);
     document.getElementById('bookmarkedFilter').addEventListener('change', goToFirstPage);

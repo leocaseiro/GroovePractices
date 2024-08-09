@@ -3,6 +3,8 @@ import { add, getAll } from './db.js';
 
 const authors = ['John Bonham', 'Steve Gadd', 'Vinnie Colaiuta', 'Dennis Chambers', 'Tony Williams'];
 const grooveNames = ['Rock Groove', 'Jazz Swing', 'Funk Beat', 'Latin Rhythm', 'Shuffle Pattern'];
+const tagNames = ['Rock', 'Pop', 'Funk', 'Latin', 'Shuffle', 'Jazz', 'Blues', 'Metal', 'Reggae', 'Hip Hop', 'Country', 'Paradiddle', 'Double Stroke', 'Buzz Roll', 'Flam Tap', 'Drag', 'Rudiment'];
+const getRandomTag = () => (tagNames[Math.floor(Math.random() * tagNames.length)]);
 
 function generateRandomGroove() {
     const name = `${grooveNames[Math.floor(Math.random() * grooveNames.length)]} ${Math.floor(Math.random() * 10) + 1}`;
@@ -11,6 +13,12 @@ function generateRandomGroove() {
     const bpm = Math.floor(Math.random() * 60) + 60; // 60-120 BPM
     const value = `Sample notation for ${name}`;
     const bookmark = Math.random() > 0.7; // 30% chance of being bookmarked
+    const tags = [
+        getRandomTag(),
+        getRandomTag(),
+        getRandomTag(),
+        getRandomTag(),
+    ];
 
     const practices = [];
     const practiceCount = Math.floor(Math.random() * 5); // 0-4 practices
@@ -22,11 +30,11 @@ function generateRandomGroove() {
         });
     }
 
-    return { name, author, difficulty, bpm, value, bookmark, practices };
+    return { name, author, difficulty, bpm, value, bookmark, practices, tags };
 }
 
 export function populateTestData(count = 50) {
-    return getAll().then(({ totalItems })) => {
+    return getAll().then(({ totalItems }) => {
         if (totalItems > 200) {
             console.log('Database already contains data. Skipping test data population.');
             return;
