@@ -12,7 +12,7 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
     grooves.forEach(groove => {
         const row = tbody.insertRow();
         row.innerHTML = `
-            <td><button class="bookmark-star ${groove.bookmark ? 'bookmarked' : 'not-bookmarked'}" data-id="${groove.id}">${groove.bookmark ? '⭐️' : '⭐️'}</button></td>
+            <td><button data-tooltip="${groove.bookmark ? 'remove bookmark' : 'bookmark groove'}" class="bookmark-star ${groove.bookmark ? 'bookmarked' : 'not-bookmarked'}" data-id="${groove.id}">${groove.bookmark ? '⭐️' : '⭐️'}</button></td>
             <td><a target="_blank" rel="nofollow noopener noreferrer" href="${groove.value}">${groove.name}</a></td>
             <td>${groove.author}</td>
             <td>${groove.difficulty}</td>
@@ -20,9 +20,9 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
             <td>${groove.tags.join(',<br> ')}</td>
             <td>${renderLastPractice(groove.practices)}</td>
              <td>
-                <button class="edit" data-id="${groove.id}">✏️</button>
-                <button class="delete" data-id="${groove.id}">🗑️</button>
-                <button class="add-practice" data-id="${groove.id}">+ Practice</button>
+                <button data-tooltip="Edit Groove" class="edit" data-id="${groove.id}">✏️</button>
+                <button data-tooltip="Remove Groove" class="delete" data-id="${groove.id}">🗑️</button>
+                <button data-tooltip="Add Practice" class="add-practice" data-id="${groove.id}">▶︎</button>
             </td>
         `;
     });

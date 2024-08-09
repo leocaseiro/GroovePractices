@@ -1,11 +1,13 @@
 import { get, update } from './db.js';
 import { loadGrooves } from './ui.js';
+import { scrollToDiv } from './shared.js';
 
 function showPracticeForm(grooveId) {
     get(grooveId).then(groove => {
         document.getElementById('practiceGrooveId').value = grooveId;
         document.getElementById('practiceBpm').value = groove.bpm;
         document.getElementById('practiceFormContainer').style.display = 'block';
+        scrollToDiv('practiceFormContainer');
     }).catch(error => {
         console.error('Error showing practice form:', error);
     });

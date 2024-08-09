@@ -1,6 +1,10 @@
 #groove-practices #grooveList th.sortable {
   cursor: pointer;
 }
+#groove-practices #search {
+  margin-bottom: 0;
+}
+
 #groove-practices #grooveList .bookmark-star {
   cursor: pointer;
   font-size: 1.2em;
@@ -84,101 +88,32 @@
   }
 }
 
-
-
-/*
-.tagifyPico {
-
-  --tags-disabled-bg: #F1F1F1;
-  --tags-border-color: var(--pico-border-color);
-  --tags-hover-border-color: var(--pico-border-color);
-  --tags-focus-border-color: var(--pico-border-color);
-  --tag-border-radius: 0px;
-  --tag-bg: #E5E5E5;
-  --tag-hover: #D3E2E2;
-  --tag-text-color: black;
-  --tag-text-color--edit: black;
-  --tag-pad: 0.3em 0.5em;
-  --tag-inset-shadow-size: 1.1em;
-  --tag-invalid-color: #D39494;
-  --tag-invalid-bg: rgba(211, 148, 148, 0.5);
-  --tag--min-width: 1ch;
-  --tag--max-width: 100%;
-  --tag-hide-transition: 0.3s;
-  --tag-remove-bg: rgba(211, 148, 148, 0.3);
-  --tag-remove-btn-color: black;
-  --tag-remove-btn-bg: none;
-  --tag-remove-btn-bg--hover: #c77777;
-  --input-color: inherit;
-  --placeholder-color: rgba(0, 0, 0, 0.4);
-  --placeholder-color-focus: rgba(0, 0, 0, 0.25);
-  --loader-size: .8em;
-  --readonly-striped: 1;
-  align-items: flex-start;
+#groove-practices .tagify {
+  width: 100%;
+  margin-bottom: var(--pico-spacing);
+  margin-top: calc(var(--pico-spacing)* .25);
+  padding: var(--pico-form-element-spacing-vertical) var(--pico-form-element-spacing-horizontal);
+  min-height: calc(1rem* var(--pico-line-height) + var(--pico-form-element-spacing-vertical)* 2 + var(--pico-border-width)* 2);
+  --pico-background-color: var(--pico-form-element-background-color);
+  --pico-border-color: var(--pico-form-element-border-color);
+  --pico-color: var(--pico-form-element-color);
+  --pico-box-shadow: none;
   border: var(--pico-border-width) solid var(--pico-border-color);
-  border: 10px solid red;
-  box-sizing: border-box;
-  display: inline-block;
-  display: inline-flex;
-  flex-wrap: wrap;
-  line-height: 0;
-  min-width: 0;
+  border-radius: var(--pico-border-radius);
   outline: 0;
+  background-color: var(--pico-background-color);
+  box-shadow: var(--pico-box-shadow);
+  color: var(--pico-color);
+  font-weight: var(--pico-font-weight);
+  transition: background-color var(--pico-transition), border-color var(--pico-transition), color var(--pico-transition), box-shadow var(--pico-transition);
+  margin: 0;
+  font-size: 1rem;
+  line-height: var(--pico-line-height);
+  font-family: inherit;
+  letter-spacing: inherit;
+}
+
+#groove-practices #grooveForm .tagify .tagify__tag,
+#groove-practices #grooveForm .tagify .tagify__input {
   padding: 0;
-  position: relative;
 }
-
-.tagifyPico .tagify__tag {
-  margin-top: 0;
-}
-
-.tagifyPico .tagify__tag>div {
-  border-radius: 25px;
-}
-
-.tagifyPico .tagify__tag:not(:only-of-type):not(.tagify__tag--editable):hover .tagify__tag-text {
-  margin-inline-end: -1px;
-}
-
-/* Do not show the "remove tag" (x) button when only a single tag remains */
-.tagifyPico .tagify__tag:only-of-type .tagify__tag__removeBtn {
-  display: none;
-}
-
-.tagifyPico .tagify__tag__removeBtn {
-  opacity: 0;
-  transform: translateX(-100%) scale(.5);
-  margin-inline: -20px 6px;
-  /* very specific on purpose  */
-  text-align: right;
-  transition: .12s;
-}
-
-.tagifyPico .tagify__tag:not(.tagify__tag--editable):hover .tagify__tag__removeBtn {
-  transform: none;
-  opacity: 1;
-}
-
-.tagifyPico+button {
-  color: #0052BF;
-  font: bold 1.4em/1.65 Arial;
-  border: 0;
-  background: none;
-  box-shadow: 0 0 0 2px inset currentColor;
-  border-radius: 50%;
-  width: 1.65em;
-  height: 1.65em;
-  cursor: pointer;
-  outline: none;
-  transition: .1s ease-out;
-  margin: 0 0 0 5px;
-  vertical-align: top;
-}
-
-.tagifyPico+button:hover {
-  box-shadow: 0 0 0 5px inset currentColor;
-}
-
-.tagifyPico .tagify__input {
-  display: none;
-} */
