@@ -1,6 +1,5 @@
 import { get, add, update, remove } from './db.js';
-import { loadGrooves } from './ui.js';
-import { populateAuthorFilter } from './search.js';
+import { applyFilters, populateAuthorFilter } from './search.js';
 import { scrollToDiv } from './shared.js';
 import { getFormTags, updateTagWhitelist } from './tags.js';
 
@@ -75,7 +74,7 @@ function saveGroove() {
             return update(groove);
         }).then(() => {
             hideGrooveForm();
-            loadGrooves();
+            applyFilters();
             populateAuthorFilter();
         }).catch(error => {
             console.error('Error saving groove:', error);
@@ -83,7 +82,7 @@ function saveGroove() {
     } else {
         add(groove).then(() => {
             hideGrooveForm();
-            loadGrooves();
+            applyFilters();
             populateAuthorFilter();
         }).catch(error => {
             console.error('Error saving groove:', error);
@@ -104,7 +103,7 @@ function editGroove(id) {
 function deleteGroove(id) {
     if (confirm('Are you sure you want to delete this groove?')) {
         remove(id).then(() => {
-            loadGrooves();
+            applyFilters();
             populateAuthorFilter();
         }).catch(error => {
             console.error('Error deleting groove:', error);

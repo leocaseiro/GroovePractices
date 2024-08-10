@@ -73,8 +73,8 @@ function handleFilterPagination(page) {
 }
 
 function populateAuthorFilter() {
-    getAll(currentPage, currentItemsPerPage).then(({ grooves }) => {
-        const authors = [...new Set(grooves.map(groove => groove.author))];
+    getAll(currentPage, currentItemsPerPage).then(({ allGrooves }) => {
+        const authors = [...new Set(allGrooves.map(groove => groove.author))];
         authors.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         const select = document.getElementById('authorFilter');
         select.innerHTML = '<option value="">All Authors</option>';

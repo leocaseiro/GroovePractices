@@ -134,7 +134,7 @@ function toggleBookmark(id) {
         groove.bookmark = !groove.bookmark;
         return update(groove);
     }).then(() => {
-        loadGrooves();
+        applyFilters();
     }).catch(error => {
         console.error('Error toggling bookmark:', error);
     });
@@ -155,11 +155,6 @@ function handleSort(column) {
     }
     setCurrentSort(newCurrentSort);
     applyFilters(1);
-}
-
-function loadGrooves(page = currentPage) {
-    setCurrentPage(page);
-    applyFilters(page);
 }
 
 // Event listeners
@@ -187,4 +182,4 @@ document.querySelector('#grooveList thead').addEventListener('click', (e) => {
     }
 });
 
-export { renderGrooves, renderPagination, loadGrooves };
+export { renderGrooves, renderPagination };

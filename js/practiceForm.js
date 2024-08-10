@@ -1,6 +1,6 @@
 import { get, update } from './db.js';
-import { loadGrooves } from './ui.js';
 import { scrollToDiv } from './shared.js';
+import { applyFilters } from './search.js';
 
 function showPracticeForm(grooveId) {
     get(grooveId).then(groove => {
@@ -36,7 +36,7 @@ function savePractice() {
         return update(groove);
     }).then(() => {
         hidePracticeForm();
-        loadGrooves();
+        applyFilters();
     }).catch(error => {
         console.error('Error saving practice:', error);
     });
