@@ -24,6 +24,7 @@ function savePractice() {
     const practice = {
         bpm: parseInt(form.bpm.value),
         score: parseInt(form.score.value),
+        loops: parseInt(form.loops.value),
         datetime: new Date().toISOString()
     };
 

@@ -27,6 +27,7 @@ function generateRandomGroove() {
             datetime: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(), // Random date within the last 30 days
             bpm: Math.floor(Math.random() * 30) + bpm - 15, // Practice BPM within ±15 of the groove BPM
             score: Math.floor(Math.random() * 41) + 60 // Score between 60-100
+            loops: Math.floor(Math.random() * 10) + 1 // Score between 1-10
         });
     }
 

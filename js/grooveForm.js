@@ -51,6 +51,7 @@ function renderPractices(practices) {
             <td>${date}</td>
             <td>${practice.bpm}</td>
             <td>${practice.score}</td>
+            <td>${practice.loops ?? 1}</td>
         `;
     });
 }
