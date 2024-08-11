@@ -2,7 +2,7 @@ import { deleteGroove, editGroove, showGrooveForm } from './grooveForm.js';
 import { showPracticeForm } from './practiceForm.js';
 import { get, getAll, remove, update } from './db.js';
 import { currentItemsPerPage, currentPage, currentSort, setCurrentPage, setCurrentSort, updateSortIndicators } from './shared.js';
-import { applyFilters, goToFirstPage, handleFilterPagination } from './search.js';
+import { applyFilters, changePage, goToFirstPage } from './search.js';
 import { updateURL } from './browserHistory.js';
 
 
@@ -42,7 +42,7 @@ function renderPagination(totalItems, currentPage, totalPages) {
     // Previous button
     const prevButton = createButton('prev', currentPage <= 1, () => {
         if (currentPage > 1) {
-            handleFilterPagination(currentPage - 1);
+            changePage(currentPage - 1);
         }
     });
 
@@ -68,7 +68,7 @@ function renderPagination(totalItems, currentPage, totalPages) {
 
     // First page button (if not in range)
     if (startPage > 1) {
-        paginationContainer.appendChild(createButton('1', false, () => handleFilterPagination(1)));
+        paginationContainer.appendChild(createButton('1', false, () => changePage(1)));
 
         if (startPage > 2) {
             paginationContainer.appendChild(createButton('...', true));
@@ -76,7 +76,7 @@ function renderPagination(totalItems, currentPage, totalPages) {
     }
     // Page buttons
     for (let i = startPage; i <= endPage; i++) {
-        paginationContainer.appendChild(createButton(i.toString(), false, () => handleFilterPagination(i), i === currentPage));
+        paginationContainer.appendChild(createButton(i.toString(), false, () => changePage(i), i === currentPage));
     }
 
     // Last page button (if not in range)
@@ -84,13 +84,13 @@ function renderPagination(totalItems, currentPage, totalPages) {
         if (endPage < totalPages - 1) {
             paginationContainer.appendChild(createButton('...', true));
         }
-        paginationContainer.appendChild(createButton(totalPages.toString(), false, () => handleFilterPagination(totalPages)));
+        paginationContainer.appendChild(createButton(totalPages.toString(), false, () => changePage(totalPages)));
     }
 
     // Next button
     const nextButton = createButton('next', currentPage >= totalPages, () => {
         if (currentPage < totalPages) {
-            handleFilterPagination(currentPage + 1);
+            changePage(currentPage + 1);
         }
     });
     paginationContainer.appendChild(nextButton);

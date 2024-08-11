@@ -66,6 +66,11 @@ function applyFilters(page = 1, reload = true) {
     });
 }
 
+function changePage(page) {
+    setCurrentPage(page);
+    updateURL();
+}
+
 // Function to handle pagination for filtered results
 function handleFilterPagination(page) {
     // Calculate pagination
@@ -96,7 +101,7 @@ function populateAuthorFilter() {
 }
 
 function goToFirstPage() {
-    goToFirstPage();
+    applyFilters(1);
 }
 
 // Event listeners
@@ -115,4 +120,4 @@ function initializeSearch(page = 1) {
     // addTagListeners(() => goToFirstPage());
 };
 
-export { applyFilters, goToFirstPage, handleFilterPagination, populateAuthorFilter, initializeSearch };
+export { applyFilters, changePage, goToFirstPage, handleFilterPagination, populateAuthorFilter, initializeSearch };
