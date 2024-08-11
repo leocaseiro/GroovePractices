@@ -1,4 +1,5 @@
 // shared.js
+export let currentAuthor = '';
 export let currentPage = 1;
 export const currentItemsPerPage = 10;
 export let filteredGrooves = [];
@@ -11,6 +12,10 @@ export function setFilteredGrooves(newFilteredGrooves) {
 }
 export function setCurrentSort(newCurrentSort) {
     currentSort = newCurrentSort;
+    updateSortIndicators();
+}
+export function setCurrentAuthor(newCurrentAuthor) {
+    currentAuthor = newCurrentAuthor;
 }
 
 export function scrollToDiv(divId) {
@@ -18,4 +23,16 @@ export function scrollToDiv(divId) {
     if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+}
+
+export function updateSortIndicators() {
+    const headers = document.querySelectorAll('#grooveList th.sortable');
+    headers.forEach(header => {
+        const column = header.getAttribute('data-sort');
+        if (column === currentSort.column) {
+            header.textContent = `${header.textContent.replace(/[▼▲]/, '')} ${currentSort.direction === 'asc' ? '▲' : '▼'}`;
+        } else {
+            header.textContent = header.textContent.replace(/[▼▲]/, '');
+        }
+    });
 }

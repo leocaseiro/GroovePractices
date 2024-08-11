@@ -1,8 +1,9 @@
 import { deleteGroove, editGroove, showGrooveForm } from './grooveForm.js';
 import { showPracticeForm } from './practiceForm.js';
 import { get, getAll, remove, update } from './db.js';
-import { currentItemsPerPage, currentPage, currentSort, setCurrentPage, setCurrentSort } from './shared.js';
-import { applyFilters, handleFilterPagination } from './search.js';
+import { currentItemsPerPage, currentPage, currentSort, setCurrentPage, setCurrentSort, updateSortIndicators } from './shared.js';
+import { applyFilters, goToFirstPage, handleFilterPagination } from './search.js';
+import { updateURL } from './browserHistory.js';
 
 
 function renderGrooves(grooves, totalItems, currentPage, totalPages) {
@@ -108,18 +109,6 @@ function createButton(text, disabled, onClick, isCurrent = false) {
     return button;
 }
 
-function updateSortIndicators() {
-    const headers = document.querySelectorAll('#grooveList th.sortable');
-    headers.forEach(header => {
-        const column = header.getAttribute('data-sort');
-        if (column === currentSort.column) {
-            header.textContent = `${header.textContent.replace(/[▼▲]/, '')} ${currentSort.direction === 'asc' ? '▲' : '▼'}`;
-        } else {
-            header.textContent = header.textContent.replace(/[▼▲]/, '');
-        }
-    });
-}
-
 function renderLastPractice(practices) {
     if (practices && practices.length > 0) {
         const lastPractice = practices[practices.length - 1];
@@ -141,45 +130,49 @@ function toggleBookmark(id) {
 }
 
 function handleSort(column) {
+    debugger;
     let newCurrentSort = {
         ...currentSort
     };
     if (currentSort.column === column) {
-        newCurrentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc',
-        setCurrentSort(newCurrentSort);
+        newCurrentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
     } else {
         newCurrentSort = {
             column: column,
             direction: 'asc'
         }
     }
+    setCurrentPage(1);
     setCurrentSort(newCurrentSort);
-    applyFilters(1);
+    updateURL();
 }
 
-// Event listeners
-document.getElementById('grooveList').addEventListener('click', (e) => {
-    if (e.target.classList.contains('bookmark-star')) {
-        const id = parseInt(e.target.getAttribute('data-id'));
-        toggleBookmark(id);
-    } else if (e.target.classList.contains('edit')) {
-        const id = parseInt(e.target.getAttribute('data-id'));
-        editGroove(id);
-    } else if (e.target.classList.contains('delete')) {
-        const id = parseInt(e.target.getAttribute('data-id'));
-        deleteGroove(id);
-    } else if (e.target.classList.contains('add-practice')) {
-        const id = parseInt(e.target.getAttribute('data-id'));
-        showPracticeForm(id);
-    }
-});
+function paginationListeners() {
+    // Event listeners
+    document.getElementById('grooveList').addEventListener('click', (e) => {
+        if (e.target.classList.contains('bookmark-star')) {
+            const id = parseInt(e.target.getAttribute('data-id'));
+            toggleBookmark(id);
+        } else if (e.target.classList.contains('edit')) {
+            const id = parseInt(e.target.getAttribute('data-id'));
+            editGroove(id);
+        } else if (e.target.classList.contains('delete')) {
+            const id = parseInt(e.target.getAttribute('data-id'));
+            deleteGroove(id);
+        } else if (e.target.classList.contains('add-practice')) {
+            const id = parseInt(e.target.getAttribute('data-id'));
+            showPracticeForm(id);
+        }
+    });
 
-document.querySelector('#grooveList thead').addEventListener('click', (e) => {
-    const th = e.target.closest('th');
-    if (th && th.classList.contains('sortable')) {
-        const column = th.getAttribute('data-sort');
-        handleSort(column);
-    }
-});
+    document.querySelector('#grooveList thead').addEventListener('click', (e) => {
+        const th = e.target.closest('th');
+        if (th && th.classList.contains('sortable')) {
+            const column = th.getAttribute('data-sort');
+            handleSort(column);
+        }
+    });
+};
 
-export { renderGrooves, renderPagination };
+
+export { paginationListeners, renderGrooves, renderPagination };

@@ -1,10 +1,11 @@
+import { updateURL } from './browserHistory.js';
 import { getAll, initDB, isDBInitialized } from './db.js';
 import { renderGrooves, renderPagination } from './ui.js';
-import { currentSort, currentPage, currentItemsPerPage, filteredGrooves, setFilteredGrooves, setCurrentPage } from './shared.js';
+import { currentAuthor, currentSort, currentPage, currentItemsPerPage, filteredGrooves, setFilteredGrooves, setCurrentPage } from './shared.js';
 import { searchTagify, initializeTagify, updateTagWhitelist, getFormTags, getSearchTags, addTagListeners } from './tags.js';
 
-function applyFilters(page = 1) {
-    console.log('applyFilters');
+function applyFilters(page = 1, reload = true) {
+    debugger;
     if (!isDBInitialized()) {
         console.error('Database is not initialized. Please wait and try again.');
         return;
@@ -56,6 +57,10 @@ function applyFilters(page = 1) {
 
         // Update tag whitelist after filtering
         updateTagWhitelist(allGrooves);
+
+        if (reload) {
+            updateURL();
+        }
     }).catch(error => {
         console.error('Error applying filters:', error);
     });
@@ -73,40 +78,41 @@ function handleFilterPagination(page) {
 }
 
 function populateAuthorFilter() {
-    getAll(currentPage, currentItemsPerPage).then(({ allGrooves }) => {
+    getAll(1, 1).then(({ allGrooves }) => {
         const authors = [...new Set(allGrooves.map(groove => groove.author))];
         authors.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         const select = document.getElementById('authorFilter');
-        select.innerHTML = '<option value="">All Authors</option>';
+        select.innerHTML = '<option value="">- All Authors -</option>';
         authors.forEach(author => {
             const option = document.createElement('option');
             option.value = author;
             option.textContent = author;
             select.appendChild(option);
         });
+        select.value = currentAuthor;
     }).catch(error => {
         console.error('Error populating author filter:', error);
     });
 }
 
 function goToFirstPage() {
-    applyFilters(1);
+    goToFirstPage();
 }
 
 // Event listeners
-function initializeSearch() {
-    document.getElementById('search').addEventListener('input', () => applyFilters(1));
-    document.getElementById('authorFilter').addEventListener('change', () => applyFilters(1));
-    document.getElementById('difficultyFilter').addEventListener('change', () => applyFilters(1));
-    document.getElementById('bookmarkedFilter').addEventListener('change', () => applyFilters(1));
+function initializeSearch(page = 1) {
+    document.getElementById('search').addEventListener('input', () => goToFirstPage());
+    document.getElementById('authorFilter').addEventListener('change', () => goToFirstPage());
+    document.getElementById('difficultyFilter').addEventListener('change', () => goToFirstPage());
+    document.getElementById('bookmarkedFilter').addEventListener('change', () => goToFirstPage());
 
     // Initialize Tagify and update tag whitelist
-    initializeTagify();
+    // initializeTagify();
     getAll().then(({ allGrooves }) => {
         updateTagWhitelist(allGrooves);
-        applyFilters(1); // Initial application of filters
+        applyFilters(page); // Initial application of filters
     });
-    addTagListeners(() => applyFilters(1));
+    // addTagListeners(() => goToFirstPage());
 };
 
-export { applyFilters, handleFilterPagination, populateAuthorFilter, initializeSearch };
+export { applyFilters, goToFirstPage, handleFilterPagination, populateAuthorFilter, initializeSearch };
