@@ -5,6 +5,25 @@ import { currentItemsPerPage, currentPage, currentSort, setCurrentPage, setCurre
 import { applyFilters, changePage, goToFirstPage } from './search.js';
 import { updateURL } from './browserHistory.js';
 
+function openPlayerModal(id) {
+    get(parseInt(id)).then((groove) => {
+        const { name, value } = groove;
+        const iFrame = document.createElement('iframe');
+        iFrame.src = value;
+
+        const modalEl = document.getElementById('player-modal');
+        const nameEl = document.getElementById('player-modal__name');
+        const contentEl = document.getElementById('player-modal__content');
+
+        // Clear previous content
+        nameEl.innerHTML = '';
+        contentEl.innerHTML = '';
+
+        nameEl.innerHTML = name;
+        contentEl.appendChild(iFrame);
+        modalEl.showModal();
+    });
+}
 
 function renderGrooves(grooves, totalItems, currentPage, totalPages) {
     const tbody = document.querySelector('#grooveList tbody');
@@ -14,7 +33,7 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
         const row = tbody.insertRow();
         row.innerHTML = `
             <td><button data-tooltip="${groove.bookmark ? 'remove bookmark' : 'bookmark groove'}" class="bookmark-star ${groove.bookmark ? 'bookmarked' : 'not-bookmarked'}" data-id="${groove.id}">${groove.bookmark ? '⭐️' : '⭐️'}</button></td>
-            <td><a target="_blank" rel="nofollow noopener noreferrer" href="${groove.value}">${groove.name}</a></td>
+            <td><a href="#" data-player-id="${groove.id}">${groove.name}</a></td>
             <td>${groove.author}</td>
             <td>${groove.difficulty}</td>
             <td>${groove.bpm}</td>
@@ -26,6 +45,13 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
                 <button data-tooltip="Add Practice" class="add-practice" data-id="${groove.id}">▶︎</button>
             </td>
         `;
+
+        // Add event listener for opening the player modal
+        const playerButton = row.querySelector('a[data-player-id]');
+        playerButton.addEventListener('click', () => {
+            const playerId = playerButton.getAttribute('data-player-id');
+            openPlayerModal(playerId);
+        });
     });
 
     // Update sort indicators
@@ -174,5 +200,15 @@ function paginationListeners() {
     });
 };
 
+function modalListeners() {
+    document.querySelectorAll('[data-close-modal]').forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = document.getElementById(button.dataset.closeModal);
+            if (!modal) return;
+            modal.close();
+        });
+    });
+}
 
-export { paginationListeners, renderGrooves, renderPagination };
+
+export { modalListeners, paginationListeners, renderGrooves, renderPagination };

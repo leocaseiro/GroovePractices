@@ -117,3 +117,14 @@
 #groove-practices #grooveForm .tagify .tagify__input {
   padding: 0;
 }
+
+#groove-practices #player-modal article {
+  max-width: 100%;
+}
+#groove-practices #player-modal iframe {
+    display: block;       /* iframes are inline by default */
+    background: #000;
+    border: none;         /* Reset default border */
+    height: 89vh;        /* Viewport-relative units */
+    width: 97vw;
+}

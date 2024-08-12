@@ -1,4 +1,4 @@
-import { get, add, update, remove } from './db.js';
+import { get, getAll, add, update, remove } from './db.js';
 import { applyFilters, populateAuthorFilter } from './search.js';
 import { scrollToDiv } from './shared.js';
 import { getFormTags, updateTagWhitelist } from './tags.js';
@@ -89,7 +89,9 @@ function saveGroove() {
         });
     }
 
-    updateTagWhitelist(allGrooves);
+    getAll(1).then(({ allGrooves }) => {
+        updateTagWhitelist(allGrooves);
+    });
 }
 
 function editGroove(id) {
