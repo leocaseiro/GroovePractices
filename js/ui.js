@@ -36,15 +36,16 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
 }
 
 function renderPagination(totalItems, currentPage, totalPages) {
+    currentPage = parseInt(currentPage);
     const paginationContainer = document.getElementById('pagination');
     paginationContainer.innerHTML = '';
 
     // Previous button
-    const prevButton = createButton('prev', currentPage <= 1, () => {
+    const prevButton = createButton({ text: 'prev', disabled: currentPage <= 1, onClick: () => {
         if (currentPage > 1) {
             changePage(currentPage - 1);
         }
-    });
+    }});
 
     paginationContainer.appendChild(prevButton);
     let startPage, endPage;
@@ -68,35 +69,35 @@ function renderPagination(totalItems, currentPage, totalPages) {
 
     // First page button (if not in range)
     if (startPage > 1) {
-        paginationContainer.appendChild(createButton('1', false, () => changePage(1)));
+        paginationContainer.appendChild(createButton({ text: '1', disabled: false, onClick: () => changePage(1) }));
 
         if (startPage > 2) {
-            paginationContainer.appendChild(createButton('...', true));
+            paginationContainer.appendChild(createButton({ text: '...', disabled: true }));
         }
     }
     // Page buttons
     for (let i = startPage; i <= endPage; i++) {
-        paginationContainer.appendChild(createButton(i.toString(), false, () => changePage(i), i === currentPage));
+        paginationContainer.appendChild(createButton({ text: i.toString(), disabled: false, onClick: () => changePage(i), isCurrent: i === currentPage }));
     }
 
     // Last page button (if not in range)
     if (endPage < totalPages) {
         if (endPage < totalPages - 1) {
-            paginationContainer.appendChild(createButton('...', true));
+            paginationContainer.appendChild(createButton({ text: '...', disabled: true }));
         }
-        paginationContainer.appendChild(createButton(totalPages.toString(), false, () => changePage(totalPages)));
+        paginationContainer.appendChild(createButton({ text: totalPages.toString(), disabled: false, onClick: () => changePage(totalPages) }));
     }
 
     // Next button
-    const nextButton = createButton('next', currentPage >= totalPages, () => {
+    const nextButton = createButton({ text: 'next', disabled: currentPage >= totalPages, onClick: () => {
         if (currentPage < totalPages) {
             changePage(currentPage + 1);
         }
-    });
+    }});
     paginationContainer.appendChild(nextButton);
 }
 
-function createButton(text, disabled, onClick, isCurrent = false) {
+function createButton({ text, disabled, onClick, isCurrent = false }) {
     const button = document.createElement('button');
     button.textContent = text;
     button.disabled = disabled;
@@ -130,7 +131,6 @@ function toggleBookmark(id) {
 }
 
 function handleSort(column) {
-    debugger;
     let newCurrentSort = {
         ...currentSort
     };

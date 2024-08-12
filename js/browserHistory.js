@@ -22,10 +22,12 @@ function updateURL() {
     params.set('direction', currentSort.direction);
     const newURL = `${window.location.pathname}?${params.toString()}`;
     history.pushState({ page: currentPage, sort: currentSort }, '', newURL);
+
+    // Force URL is changed as popstate event is not triggered when the URL is changed programmatically via history.pushState
+    updateFieldsFromURL(true);
 }
 
 function updateFieldsFromURL(applyingFilters = true) {
-    debugger;
     const params = new URLSearchParams(window.location.search);
     const search = params.get('search') || '';
     const tags = params.get('tags') || '';

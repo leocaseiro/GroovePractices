@@ -13,14 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
         updateFieldsFromURL(false);
         initializeSearch(currentPage);
         paginationListeners();
-        // applyFilters();
-        // populateTestData(4050, 5000); // This will add 50 test grooves if the database is empty
+        // populateTestData(50, 500); // This will add 50 test grooves if the database is empty
 
-        // Add popstate event listener
-        window.addEventListener('popstate', (event) => {
-            updateFieldsFromURL();
-        });
-
+        // Add event listeners for when URL is changed
+        window.onpopstate = function(event) {
+            updateFieldsFromURL(true);
+        }
     }).catch(error => {
         console.error('Error initializing app:', error);
     });

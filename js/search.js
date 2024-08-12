@@ -5,7 +5,6 @@ import { currentAuthor, currentSort, currentPage, currentItemsPerPage, filteredG
 import { searchTagify, initializeTagify, updateTagWhitelist, getFormTags, getSearchTags, addTagListeners } from './tags.js';
 
 function applyFilters(page = 1, reload = true) {
-    debugger;
     if (!isDBInitialized()) {
         console.error('Database is not initialized. Please wait and try again.');
         return;
@@ -101,7 +100,8 @@ function populateAuthorFilter() {
 }
 
 function goToFirstPage() {
-    applyFilters(1);
+    setCurrentPage(1);
+    updateURL();
 }
 
 // Event listeners
@@ -115,7 +115,7 @@ function initializeSearch(page = 1) {
     // initializeTagify();
     getAll().then(({ allGrooves }) => {
         updateTagWhitelist(allGrooves);
-        applyFilters(page); // Initial application of filters
+        applyFilters(page, false); // Initial application of filters
     });
     // addTagListeners(() => goToFirstPage());
 };

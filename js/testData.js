@@ -7,18 +7,17 @@ const tagNames = ['Rock', 'Pop', 'Funk', 'Latin', 'Shuffle', 'Jazz', 'Blues', 'M
 const getRandomTag = () => (tagNames[Math.floor(Math.random() * tagNames.length)]);
 
 function generateRandomGroove() {
-    // const name = `${grooveNames[Math.floor(Math.random() * grooveNames.length)]} ${Math.floor(Math.random() * 10) + 1}`;
-    const name = `Groove ${Math.floor(Math.random() * 10) + 1}`;
-    // const author = authors[Math.floor(Math.random() * authors.length)];
-    const author = 'Tony Williams';
-    // const difficulty = Math.floor(Math.random() * 10) + 1;
-    const difficulty = 3;
+    const name = `${grooveNames[Math.floor(Math.random() * grooveNames.length)]} ${Math.floor(Math.random() * 10) + 1}`;
+    // const name = `Groove ${Math.floor(Math.random() * 10) + 1}`;
+    const author = authors[Math.floor(Math.random() * authors.length)];
+    // const author = 'Tony Williams';
+    const difficulty = Math.floor(Math.random() * 10) + 1;
+    // const difficulty = 3;
     const bpm = Math.floor(Math.random() * 60) + 60; // 60-120 BPM
     const value = `Sample notation for ${name}`;
-    // const bookmark = Math.random() > 0.7; // 30% chance of being bookmarked
-    const bookmark = true; // 30% chance of being bookmarked
+    const bookmark = Math.random() > 0.7; // 30% chance of being bookmarked
+    // const bookmark = true; // 30% chance of being bookmarked
     const tags = [
-        'Rock',
         getRandomTag(),
         getRandomTag(),
         getRandomTag(),

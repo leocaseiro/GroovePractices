@@ -5,7 +5,7 @@ export const currentItemsPerPage = 10;
 export let filteredGrooves = [];
 export let currentSort = { column: 'difficulty', direction: 'asc' };
 export function setCurrentPage(page) {
-    currentPage = page;
+    currentPage = Number(page);
 }
 export function setFilteredGrooves(newFilteredGrooves) {
     filteredGrooves = newFilteredGrooves;
