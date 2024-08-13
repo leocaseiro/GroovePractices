@@ -23,6 +23,12 @@
   filter: grayscale(100%);
 }
 
+#groove-practices #grooveList  .td-actions {
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+}
+
 #groove-practices .hidden {
   display: none;
 }

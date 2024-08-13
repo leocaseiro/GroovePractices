@@ -36,3 +36,10 @@ export function updateSortIndicators() {
         }
     });
 }
+
+// Helper function to escape HTML
+export function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
