@@ -11,9 +11,10 @@ function openPlayerModal(id) {
         const iFrame = document.createElement('iframe');
         iFrame.src = value;
 
-        const modalEl = document.getElementById('player-modal');
-        const nameEl = document.getElementById('player-modal__name');
-        const contentEl = document.getElementById('player-modal__content');
+        const modalEl = document.getElementById('js-player-modal');
+        const nameEl = document.getElementById('js-player-modal__name');
+        const contentEl = document.getElementById('js-player-modal__content');
+        const saveIframeEl = document.getElementById('js-save-iframe');
 
         // Clear previous content
         nameEl.innerHTML = '';
@@ -21,6 +22,7 @@ function openPlayerModal(id) {
 
         nameEl.innerHTML = name;
         contentEl.appendChild(iFrame);
+        saveIframeEl.dataset.grooveId = id;
         modalEl.showModal();
     });
 }

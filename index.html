@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light dark" />
     <title>Groove Practices</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css">
-    <link rel="stylesheet" href="./style.css?2">
+    <link rel="stylesheet" href="./style.css?3">
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 </head>
@@ -150,13 +150,20 @@
         </section>
 
         <!-- Player Modal -->
-        <dialog id="player-modal">
+        <dialog class="player-modal" id="js-player-modal">
             <article>
               <header>
-                <button data-close-modal="player-modal" aria-label="Close" rel="prev"></button>
-                <h2>Practice <span id="player-modal__name"></span></h2>
+                <button type="button" data-close-modal="js-player-modal" aria-label="Close" rel="prev"></button>
+                <h2>Practice <span id="js-player-modal__name"></span></h2>
               </header>
-             <div id="player-modal__content"></div>
+             <div id="js-player-modal__content"></div>
+             <footer>
+                <form id="playerModalForm">
+                    <div class="form-actions">
+                        <button class="secondary" data-close-modal="js-player-modal" type="button">close</button>
+                        <button data-groove-id="" id="js-save-iframe" type="submit">save</button></footer>
+                    </div>
+                </form>
             </article>
           </dialog>
     </main>
@@ -164,11 +171,11 @@
 
 
     <!-- Our Scripts -->
-    <script type="module" src="./js/db.js?2"></script>
-    <script type="module" src="./js/ui.js?2"></script>
-    <script type="module" src="./js/search.js?2"></script>
-    <script type="module" src="./js/grooveForm.js?2"></script>
-    <script type="module" src="./js/practiceForm.js?2"></script>
-    <script type="module" src="./js/app.js?2"></script>
+    <script type="module" src="./js/db.js?3"></script>
+    <script type="module" src="./js/ui.js?3"></script>
+    <script type="module" src="./js/search.js?3"></script>
+    <script type="module" src="./js/grooveForm.js?3"></script>
+    <script type="module" src="./js/practiceForm.js?3"></script>
+    <script type="module" src="./js/app.js?3"></script>
 </body>
 </html>

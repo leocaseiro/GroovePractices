@@ -118,13 +118,13 @@
   padding: 0;
 }
 
-#groove-practices #player-modal article {
+#groove-practices .player-modal article {
   max-width: 100%;
 }
-#groove-practices #player-modal iframe {
+#groove-practices .player-modal iframe {
     display: block;       /* iframes are inline by default */
     background: #000;
     border: none;         /* Reset default border */
-    height: 89vh;        /* Viewport-relative units */
+    height: calc(89vh - 165px);        /* Viewport-relative units */
     width: 97vw;
 }
