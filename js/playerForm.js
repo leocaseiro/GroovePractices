@@ -2,14 +2,12 @@ import { get, getAll, update } from './db.js';
 import { applyFilters, populateAuthorFilter } from './search.js';
 import { updateTagWhitelist } from './tags.js';
 
-function savePlayerGroove() {
+function savePlayerGroove(value) {
     const playerModalContentEl = document.getElementById('js-player-modal__content');
     const saveIframeBtn = document.getElementById('js-save-iframe');
     const save = document.getElementById('js-player-modal__content');
 
     const grooveId = parseInt(saveIframeBtn.dataset.grooveId);
-    const iframe = playerModalContentEl.getElementsByTagName('iframe')[0];
-    const value = iframe.contentWindow.location.href; // CORS ISSUES
     let groove = {};
 
     if (grooveId) {

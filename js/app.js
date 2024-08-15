@@ -2,9 +2,12 @@ import { initDB } from './db.js';
 import { currentPage } from './shared.js';
 import { modalListeners, paginationListeners } from './ui.js';
 import { updateFieldsFromURL } from './browserHistory.js';
+import { grooveFormListeners } from './grooveForm.js';
+import { playerModalListeners } from './playerForm.js';
+import { practiceFormListeners } from './practiceForm.js';
 import { applyFilters, initializeSearch, populateAuthorFilter } from './search.js';
 import { searchTagify, initializeTagify, updateTagWhitelist, getFormTags, getSearchTags, addTagListeners } from './tags.js';
-import { playerModalListeners } from './playerForm.js';
+
 // import { populateTestData } from './testData.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,9 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
         populateAuthorFilter();
         updateFieldsFromURL(false);
         initializeSearch(currentPage);
-        paginationListeners();
+
+        grooveFormListeners();
         modalListeners();
+        paginationListeners();
         playerModalListeners();
+        practiceFormListeners();
         // populateTestData(50, 500); // This will add 50 test grooves if the database is empty
 
         // Add event listeners for when URL is changed

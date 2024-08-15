@@ -14,6 +14,7 @@ function openPlayerModal(id) {
         const modalEl = document.getElementById('player-modal');
         const nameEl = document.getElementById('player-modal__name');
         const contentEl = document.getElementById('player-modal__content');
+        const grooveIdHiddenInput = document.getElementById('js-grooveId');
 
         // Clear previous content
         nameEl.innerHTML = '';
@@ -21,6 +22,7 @@ function openPlayerModal(id) {
 
         nameEl.innerHTML = name;
         contentEl.appendChild(iFrame);
+        grooveIdHiddenInput.value = id;
         modalEl.showModal();
     });
 }

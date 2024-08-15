@@ -114,11 +114,13 @@ function deleteGroove(id) {
 }
 
 // Event listeners
-document.getElementById('addGroove').addEventListener('click', () => showGrooveForm());
-document.getElementById('grooveForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    saveGroove();
-});
-document.getElementById('cancelForm').addEventListener('click', () => hideGrooveForm());
+const grooveFormListeners = () => {
+    document.getElementById('addGroove').addEventListener('click', () => showGrooveForm());
+    document.getElementById('grooveForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        saveGroove();
+    });
+    document.getElementById('cancelForm').addEventListener('click', () => hideGrooveForm());
+}
 
-export { deleteGroove, editGroove, showGrooveForm }
+export { deleteGroove, editGroove, grooveFormListeners, showGrooveForm }
