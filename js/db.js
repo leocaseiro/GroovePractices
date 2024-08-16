@@ -3,7 +3,7 @@ import { currentPage, currentItemsPerPage, setCurrentPage } from './shared.js';
 let db;
 const dbName = 'GroovePracticesDB';
 const STORE_NAME = 'grooves';
-const dbVersion = 2;
+const dbVersion = 3;
 
 function initDB() {
     return new Promise((resolve, reject) => {
@@ -62,6 +62,7 @@ function initDB() {
                     }
                 };
             }
+
         };
     });
 }

@@ -43,10 +43,12 @@ function savePractice() {
 }
 
 // Event listeners
-document.getElementById('practiceForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    savePractice();
-});
-document.getElementById('cancelPractice').addEventListener('click', () => hidePracticeForm());
+const practiceFormListeners = () => {
+    document.getElementById('practiceForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        savePractice();
+    });
+    document.getElementById('cancelPractice').addEventListener('click', () => hidePracticeForm());
+}
 
-export { showPracticeForm };
+export { practiceFormListeners, showPracticeForm };

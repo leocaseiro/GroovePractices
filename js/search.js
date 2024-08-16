@@ -12,7 +12,6 @@ function applyFilters(page = 1, reload = true) {
 
     setCurrentPage(page);
     const searchTerm = document.getElementById('search').value.toLowerCase();
-    // const tagSearchTerms = getSearchTags();
     const tagSearchTerms = searchTagify.value.map(tag => tag.value.toLowerCase());
     const authorFilter = document.getElementById('authorFilter').value;
     const difficultyFilter = document.getElementById('difficultyFilter').value;
@@ -117,7 +116,7 @@ function initializeSearch(page = 1) {
         updateTagWhitelist(allGrooves);
         applyFilters(page, false); // Initial application of filters
     });
-    // addTagListeners(() => goToFirstPage());
+    addTagListeners(() => goToFirstPage());
 };
 
 export { applyFilters, changePage, goToFirstPage, handleFilterPagination, populateAuthorFilter, initializeSearch };

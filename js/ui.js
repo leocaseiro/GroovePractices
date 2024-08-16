@@ -1,19 +1,20 @@
 import { deleteGroove, editGroove, showGrooveForm } from './grooveForm.js';
 import { showPracticeForm } from './practiceForm.js';
 import { get, getAll, remove, update } from './db.js';
-import { currentItemsPerPage, currentPage, currentSort, setCurrentPage, setCurrentSort, updateSortIndicators } from './shared.js';
+import { currentItemsPerPage, currentPage, currentSort, escapeHTML, setCurrentPage, setCurrentSort, updateSortIndicators } from './shared.js';
 import { applyFilters, changePage, goToFirstPage } from './search.js';
 import { updateURL } from './browserHistory.js';
 
 function openPlayerModal(id) {
     get(parseInt(id)).then((groove) => {
-        const { name, value } = groove;
+        const { name, url } = groove;
         const iFrame = document.createElement('iframe');
-        iFrame.src = value;
+        iFrame.src = url;
 
         const modalEl = document.getElementById('player-modal');
         const nameEl = document.getElementById('player-modal__name');
         const contentEl = document.getElementById('player-modal__content');
+        const grooveIdHiddenInput = document.getElementById('js-grooveId');
 
         // Clear previous content
         nameEl.innerHTML = '';
@@ -21,6 +22,7 @@ function openPlayerModal(id) {
 
         nameEl.innerHTML = name;
         contentEl.appendChild(iFrame);
+        grooveIdHiddenInput.value = id;
         modalEl.showModal();
     });
 }
@@ -31,25 +33,54 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
 
     grooves.forEach(groove => {
         const row = tbody.insertRow();
-        row.innerHTML = `
-            <td><button data-tooltip="${groove.bookmark ? 'remove bookmark' : 'bookmark groove'}" class="bookmark-star ${groove.bookmark ? 'bookmarked' : 'not-bookmarked'}" data-id="${groove.id}">${groove.bookmark ? '⭐️' : '⭐️'}</button></td>
-            <td><a href="#" data-player-id="${groove.id}">${groove.name}</a></td>
-            <td>${groove.author}</td>
-            <td>${groove.difficulty}</td>
-            <td>${groove.bpm}</td>
-            <td>${groove.tags.join(',<br> ')}</td>
-            <td>${renderLastPractice(groove.practices)}</td>
-             <td>
-                <button data-tooltip="Edit Groove" class="edit" data-id="${groove.id}">✏️</button>
-                <button data-tooltip="Remove Groove" class="delete" data-id="${groove.id}">🗑️</button>
-                <button data-tooltip="Add Practice" class="add-practice" data-id="${groove.id}">▶︎</button>
-            </td>
-        `;
+
+        // Create and append cells
+        const bookmarkCell = row.insertCell();
+        const bookmarkButton = document.createElement('button');
+        bookmarkButton.setAttribute('data-tooltip', groove.bookmark ? 'remove bookmark' : 'bookmark groove');
+        bookmarkButton.className = `bookmark-star ${groove.bookmark ? 'bookmarked' : 'not-bookmarked'}`;
+        bookmarkButton.setAttribute('data-id', groove.id);
+        bookmarkButton.textContent = '⭐️';
+        bookmarkCell.appendChild(bookmarkButton);
+
+        const nameCell = row.insertCell();
+        const nameLink = document.createElement('a');
+        nameLink.href = '#';
+        nameLink.setAttribute('data-player-id', groove.id);
+        nameLink.textContent = groove.name;
+        nameCell.appendChild(nameLink);
+
+        const authorCell = row.insertCell();
+        authorCell.textContent = groove.author;
+
+        const difficultyCell = row.insertCell();
+        difficultyCell.textContent = groove.difficulty;
+
+        const bpmCell = row.insertCell();
+        bpmCell.textContent = groove.bpm;
+
+        const tagsCell = row.insertCell();
+        tagsCell.innerHTML = groove.tags.map(tag => escapeHTML(tag)).join(', ');
+
+        const practiceCell = row.insertCell();
+        practiceCell.innerHTML = renderLastPractice(groove.practices);
+
+        const actionsCell = row.insertCell();
+        const actionsDiv = document.createElement('div');
+        ['Edit Groove', 'Remove Groove', 'Add Practice'].forEach((tooltip, index) => {
+            const button = document.createElement('button');
+            button.setAttribute('data-tooltip', tooltip);
+            button.className = ['edit', 'delete', 'add-practice'][index];
+            button.setAttribute('data-id', groove.id);
+            button.textContent = ['✏️', '🗑️', '▶︎'][index];
+            actionsDiv.appendChild(button);
+            actionsDiv.classList.add('td-actions');
+        });
+        actionsCell.appendChild(actionsDiv);
 
         // Add event listener for opening the player modal
-        const playerButton = row.querySelector('a[data-player-id]');
-        playerButton.addEventListener('click', () => {
-            const playerId = playerButton.getAttribute('data-player-id');
+        nameLink.addEventListener('click', () => {
+            const playerId = nameLink.getAttribute('data-player-id');
             openPlayerModal(playerId);
         });
     });
