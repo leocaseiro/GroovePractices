@@ -14,7 +14,7 @@ function generateRandomGroove() {
     const difficulty = Math.floor(Math.random() * 10) + 1;
     // const difficulty = 3;
     const bpm = Math.floor(Math.random() * 60) + 60; // 60-120 BPM
-    const url = `http://127.0.0.1:5500/index.html?TimeSig=4/4&Div=16&Tempo=80&Measures=1&H=|xxxxxxxxxxxxxxxx|&S=|----O-------O---|&K=|o-------o-------|`;
+    const url = `https://leocaseiro.github.io/GrooveScribe/index.html?TimeSig=4/4&Div=16&Tempo=80&Measures=1&H=|xxxxxxxxxxxxxxxx|&S=|----O-------O---|&K=|o-------o-------|`;
     const bookmark = Math.random() > 0.7; // 30% chance of being bookmarked
     // const bookmark = true; // 30% chance of being bookmarked
     const tags = [
