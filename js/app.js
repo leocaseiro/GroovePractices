@@ -3,7 +3,6 @@ import { currentPage } from './shared.js';
 import { modalListeners, paginationListeners } from './ui.js';
 import { updateFieldsFromURL } from './browserHistory.js';
 import { grooveFormListeners } from './grooveForm.js';
-import { playerModalListeners } from './playerForm.js';
 import { practiceFormListeners } from './practiceForm.js';
 import { grooveScribeMessagesListeners } from './grooveScribeMessages.js';
 import { applyFilters, initializeSearch, populateAuthorFilter } from './search.js';
@@ -22,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
         grooveFormListeners();
         modalListeners();
         paginationListeners();
-        playerModalListeners();
         practiceFormListeners();
         grooveScribeMessagesListeners();
         // populateTestData(1, 1); // This will add 50 test grooves if the database is empty
