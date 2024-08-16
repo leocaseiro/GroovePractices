@@ -36,7 +36,7 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
 
         // Create and append cells
         const bookmarkCell = row.insertCell();
-        const bookmarkButton = document.createElement('a');
+        const bookmarkButton = document.createElement('button');
         bookmarkButton.setAttribute('data-tooltip', groove.bookmark ? 'remove bookmark' : 'bookmark groove');
         bookmarkButton.className = `bookmark-star ${groove.bookmark ? 'bookmarked' : 'not-bookmarked'}`;
         bookmarkButton.setAttribute('data-id', groove.id);
