@@ -36,7 +36,7 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
 
         // Create and append cells
         const bookmarkCell = row.insertCell();
-        const bookmarkButton = document.createElement('button');
+        const bookmarkButton = document.createElement('a');
         bookmarkButton.setAttribute('data-tooltip', groove.bookmark ? 'remove bookmark' : 'bookmark groove');
         bookmarkButton.className = `bookmark-star ${groove.bookmark ? 'bookmarked' : 'not-bookmarked'}`;
         bookmarkButton.setAttribute('data-id', groove.id);
@@ -45,7 +45,7 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
 
         const nameCell = row.insertCell();
         const nameLink = document.createElement('a');
-        nameLink.href = '#';
+        nameLink.setAttribute('href', groove.url);
         nameLink.setAttribute('data-player-id', groove.id);
         nameLink.textContent = groove.name;
         nameCell.appendChild(nameLink);
@@ -79,7 +79,8 @@ function renderGrooves(grooves, totalItems, currentPage, totalPages) {
         actionsCell.appendChild(actionsDiv);
 
         // Add event listener for opening the player modal
-        nameLink.addEventListener('click', () => {
+        nameLink.addEventListener('click', (e) => {
+            e.preventDefault();
             const playerId = nameLink.getAttribute('data-player-id');
             openPlayerModal(playerId);
         });
