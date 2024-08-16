@@ -2,7 +2,7 @@ import { get, getAll, update } from './db.js';
 import { applyFilters, populateAuthorFilter } from './search.js';
 import { updateTagWhitelist } from './tags.js';
 
-function savePlayerGroove(value) {
+function savePlayerGroove(url) {
     const playerModalContentEl = document.getElementById('js-player-modal__content');
     const saveIframeBtn = document.getElementById('js-save-iframe');
     const save = document.getElementById('js-player-modal__content');
@@ -12,7 +12,7 @@ function savePlayerGroove(value) {
 
     if (grooveId) {
         get(grooveId).then(existingGroove => {
-            groove = {...existingGroove, value};
+            groove = {...existingGroove, url};
             return update(groove);
         }).then(() => {
             applyFilters();
@@ -28,7 +28,7 @@ function savePlayerGroove(value) {
 }
 
 const playerModalListeners = () => {
-    document.getElementById('playerModalForm').addEventListener('submit', (e) => {
+    document.getElementById('playerModalForm')?.addEventListener('submit', (e) => {
         e.preventDefault();
         savePlayerGroove();
     });

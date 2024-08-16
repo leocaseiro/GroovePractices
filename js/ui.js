@@ -7,9 +7,9 @@ import { updateURL } from './browserHistory.js';
 
 function openPlayerModal(id) {
     get(parseInt(id)).then((groove) => {
-        const { name, value } = groove;
+        const { name, url } = groove;
         const iFrame = document.createElement('iframe');
-        iFrame.src = value;
+        iFrame.src = url;
 
         const modalEl = document.getElementById('player-modal');
         const nameEl = document.getElementById('player-modal__name');

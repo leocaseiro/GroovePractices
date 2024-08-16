@@ -14,7 +14,7 @@ function showGrooveForm(groove = null) {
         form.name.value = groove.name;
         form.author.value = groove.author;
         form.difficulty.value = groove.difficulty;
-        form.value.value = groove.value;
+        form.url.value = groove.url;
         form.bpm.value = groove.bpm;
         form.formTags.value = groove.tags ? groove.tags.join(', ') : '';
 
@@ -55,17 +55,29 @@ function renderPractices(practices) {
     });
 }
 
+function isUrlValid(url) {
+    const expression = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
+    const regex = new RegExp(expression);
+
+    return url.match(regex);
+}
+
 function saveGroove() {
     const form = document.getElementById('grooveForm');
     const groove = {
         name: form.name.value,
         author: form.author.value,
         difficulty: parseInt(form.difficulty.value),
-        value: form.value.value,
+        url: form.url.value,
         bpm: parseInt(form.bpm.value),
         practices: [],
         tags: getFormTags()
     };
+
+    if (!isUrlValid(groove.url)) {
+        alert('Invalid URL. Please enter a valid URL.');
+        return;
+    }
 
     if (form.grooveId.value) {
         groove.id = parseInt(form.grooveId.value);

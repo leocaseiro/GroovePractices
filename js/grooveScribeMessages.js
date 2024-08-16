@@ -1,13 +1,30 @@
-const grooveScribeMessages = {
-    const iframe = document.querySelector('iframe');
-    if (!iframe) {
+import { get, update } from './db.js';
+
+const saveGrooveScribeViaPostMessage = (e) => {
+    if (e.data?.message !== 'saveGrooveScribe') {
         return;
     }
-    // Send GIC data used for initialisation
-    iframe.addEventListener('message', messageHandler);
 
-    return () => {
-        // eslint-disable-next-line @repo/internal/dom-events/no-unsafe-event-listeners
-        window.removeEventListener('message', messageHandler);
-    };
+    const grooveIdHiddenInput = document.getElementById('js-grooveId');
+    const grooveId = parseInt(grooveIdHiddenInput.value);
+
+    if (!grooveId) {
+        return;
+    }
+
+    get(grooveId).then(existingGroove => {
+        const groove = {
+            ...existingGroove,
+            url: e.data.url,
+        };
+        return update(groove);
+    }).then(() => {
+        alert('Groove URL updated!');
+    }).catch(error => {
+        console.error('Error saving groove:', error);
+    });
+}
+
+export const grooveScribeMessagesListeners = () => {
+    window.addEventListener('message', saveGrooveScribeViaPostMessage);
 };
